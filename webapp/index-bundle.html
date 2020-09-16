@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenUI5 Todo App</title>
 
-    <script id="sap-ui-bootstrap"
-        src="resources/custom-boot.js"
-        data-sap-ui-theme="sap_fiori_3"
-        data-sap-ui-resourceRoots='{
-            "sap.ui.demo.todo": "./"
-        }'
-        data-sap-ui-modules="sap.ui.demo.todo.Component-bundle"
-        data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
-        data-sap-ui-compatVersion="edge"
-        data-sap-ui-async="true"
-        async>
-    </script>
+	<script id="sap-ui-bootstrap"
+		src="resources/custom-boot.js"
+		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-resourceRoots='{
+			"sap.ui.demo.todo": "./"
+		}'
+		data-sap-ui-modules="sap.ui.demo.todo.Component-bundle"
+		data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
+		data-sap-ui-compatVersion="edge"
+		data-sap-ui-async="true"
+		data-sap-ui-language="en"
+		data-sap-ui-xx-waitForTheme="true"
+		data-sap-ui-theme-roots='{
+			"sap_fiori_3" : "https://openui5.hana.ondemand.com/1.81.1/resources"
+		}'
+		async>
+	</script>
 </head>
 
 <body class="sapUiBody">

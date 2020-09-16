@@ -12,6 +12,7 @@
 		"test": "npm run lint && npm run karma-ci",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
+		"build-perf": "ui5 build self-contained --exclude-task=createDebugFiles --clean-dest",
 		"serve-dist": "ws --compress -d dist"
 	},
 	"dependencies": {},
@@ -22,6 +23,12 @@
 		"karma-coverage": "^2.0.3",
 		"karma-ui5": "^2.3.0",
 		"local-web-server": "^4.2.1",
-		"rimraf": "^3.0.2"
+		"rimraf": "^3.0.2",
+		"ui5-task-copy-resources": "0.0.1"
+	},
+	"ui5": {
+		"dependencies": [
+			"ui5-task-copy-resources"
+		]
 	}
 }

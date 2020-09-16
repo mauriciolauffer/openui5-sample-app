@@ -10,6 +10,17 @@ framework:
     - name: sap.ui.core
     - name: themelib_sap_fiori_3
 builder:
+  resources:
+    excludes:
+    - "/localService/**"
+    - "/test/**"
+  customTasks:
+  - name: ui5-task-copy-resources
+    afterTask: uglify
+    configuration:
+      includeDependencies: true
+      resources:
+        "**/*.properties"
   bundles:
   - bundleDefinition:
       name: custom-boot.js
@@ -42,7 +53,6 @@ builder:
       - ".js"
       - ".json"
       - ".xml"
-      - ".properties"
       sections:
       - mode: provided
         filters:
@@ -51,13 +61,10 @@ builder:
         resolve: true
       - mode: preload
         filters:
-        - sap/ui/demo/todo/Component.js
-        - sap/ui/demo/todo/manifest.json
-        - sap/ui/demo/todo/controller/**
-        - sap/ui/demo/todo/i18n/**
-        - sap/ui/demo/todo/view/**
+        - sap/ui/demo/todo/**
         resolve: true
         sort: true
     bundleOptions:
       optimize: true
       usePredefineCalls: true
+
