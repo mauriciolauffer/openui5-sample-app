@@ -20,7 +20,8 @@ builder:
     configuration:
       includeDependencies: true
       resources:
-        "**/*.properties"
+        - "**/*_de.properties"
+        - "**/*_en.properties"
   bundles:
   - bundleDefinition:
       name: custom-boot.js
