@@ -9,9 +9,7 @@
 			"minUI5Version": "1.75.0",
 			"libs": {
 				"sap.ui.core": {},
-				"sap.m": {},
-				"sap.f": {},
-				"sap.ui.unified": {}
+				"sap.m": {}
 			}
 		},
 		"rootView": {
