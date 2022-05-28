@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+	<script id="sap-ui-bootstrap"
+		src="https://ui5.sap.com/1.96.0/resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_fiori_3"
+		data-sap-ui-language="en"
+		data-sap-ui-async="true"
+		data-sap-ui-resourceroots='{
+			"sap.ui.demo.todo": "../../",
+			"test": "../"}'></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script defer src="https://unpkg.com/sinon/pkg/sinon.js"></script>
+    <script defer src="https://unpkg.com/chai/chai.js"></script>
+    <script defer src="https://unpkg.com/mocha/mocha.js"></script>
+	<script defer src="unitTests.js"></script>
+  </body>
+</html>

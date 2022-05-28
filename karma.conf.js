@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = function (config) {
 	"use strict";
 
 	var chromeFlags = [
@@ -7,7 +7,20 @@ module.exports = function(config) {
 
 	config.set({
 
-		frameworks: ["ui5"],
+		frameworks: ["mocha", "chai", "sinon"],
+
+		files: [
+			"https://ui5.sap.com/1.96.0/resources/sap-ui-core.js",
+			"webapp/test/karma-mocha-ui5-config.js",
+			{ pattern: "webapp/test/**/*.js", included: true, served: true, watched: true },
+			{ pattern: "webapp/**/*.js", included: false, served: true, watched: true }
+		],
+
+		exclude: [
+			'webapp/test/unit/*.js'
+		],
+
+		useIframe: false,
 
 		browsers: ["CustomChrome"],
 

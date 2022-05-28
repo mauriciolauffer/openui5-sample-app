@@ -1,3 +1,3 @@
 sap.ui.define([
-	"./controller/App.controller"
+	"test/unit/controller/App.controller"
 ]);
