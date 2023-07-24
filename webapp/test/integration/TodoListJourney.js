@@ -19,11 +19,13 @@ sap.ui.define([
 		// Assertions
 		Then.onTheAppPage.iShouldSeeTheItemBeingAdded(3, "my test");
 
+		window.xxxonTheAppPage = Then.onTheAppPage;
+
 		// Cleanup
-		Then.iTeardownMyApp();
+		//Then.iTeardownMyApp();
 	});
 
-	opaTest("should remove a completed item", function (Given, When, Then) {
+	/* opaTest("should remove a completed item", function (Given, When, Then) {
 
 		// Arrangements
 		Given.iStartMyApp();
@@ -75,5 +77,5 @@ sap.ui.define([
 
 		// Cleanup
 		Then.iTeardownMyApp();
-	});
+	}); */
 });

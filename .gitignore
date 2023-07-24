@@ -61,3 +61,6 @@ typings/
 .DS_Store
 
 dist/
+/test-results/
+/playwright-report/
+/playwright/.cache/

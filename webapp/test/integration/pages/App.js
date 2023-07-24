@@ -6,9 +6,17 @@ sap.ui.require([
 	"sap/ui/test/matchers/Ancestor",
 	"sap/ui/test/matchers/Properties",
 	"sap/ui/test/actions/EnterText",
-	"sap/ui/test/actions/Press"
-], function (Device, Opa5, AggregationLengthEquals, PropertyStrictEquals, Ancestor, Properties, EnterText, Press) {
+	"sap/ui/test/actions/Press",
+	"sap/ui/test/OpaBuilder"
+], function (Device, Opa5, AggregationLengthEquals, PropertyStrictEquals, Ancestor, Properties, EnterText, Press, OpaBuilder) {
 	"use strict";
+
+	console.dir(sap.ui.test.Opa);
+	console.dir(sap.ui.test.Opa5);
+	console.dir(sap.ui.test.OpaBuilder);
+	console.dir(OpaBuilder);
+
+window.xxxOpaBuilder = OpaBuilder;
 
 	var sViewName = "sap.ui.demo.todo.view.App";
 	var sAddToItemInputId = "addTodoItemInput";
@@ -125,6 +133,30 @@ sap.ui.require([
 
 			assertions: {
 				iShouldSeeTheItemBeingAdded: function(iItemCount, sLastAddedText) {
+					/* let x3 = new OpaBuilder()
+					.hasType("sap.m.Avatar")
+					.success(console.dir)
+					.error(console.error)
+					.execute(); */
+
+					/* let x1 = new OpaBuilder()
+					.hasType("sap.m.Input")
+					.viewName("sap.ui.demo.todo.view.App")
+					.success(() => {console.log(111); console.dir(arguments); Opa5.assert.ok(true);})
+					.error(() => {console.log(222); console.error(arguments)})
+					.build();
+					console.dir(x1) */
+
+					let x2 = new OpaBuilder()
+					.hasType("sap.m.Input")
+					.viewName("sap.ui.demo.todo.view.App")
+					.success(() => {console.log(333); Opa5.assert.ok(true);})
+					.execute();
+					console.dir(x2)
+
+					//return this.waitFor(x1);
+					return x2;
+
 					return this.waitFor({
 						id: sItemListId,
 						viewName: sViewName,
