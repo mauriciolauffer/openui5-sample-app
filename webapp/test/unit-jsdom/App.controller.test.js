@@ -1,35 +1,39 @@
 'use strict';
 
-import { test, describe, before, after, mock } from 'node:test';
+import { describe, it, before, after, mock } from 'node:test';
 import assert from 'node:assert';
 import { JSDOM } from 'jsdom';
 
-/* "sap/ui/base/ManagedObject",
-"sap/ui/core/mvc/Controller",
-"sap/ui/demo/todo/controller/App.controller",
-"sap/ui/model/json/JSONModel",
-"sap/ui/model/resource/ResourceModel",
-"sap/ui/Device" */
+const optionsDefault = {
+	resources: 'usable',
+	referrer: "https://ui5.sap.com/",
+	runScripts: 'dangerously',
+	pretendToBeVisual: true,
+	beforeParse: (jsdomWindow) => {
+		jsdomWindow.matchMedia = function () {
+			return {
+				matches: false,
+				addListener: function () {},
+				removeListener: function () {}
+			};
+		};
+		jsdomWindow.performance.timing = {
+			fetchStart: Date.now(),
+			navigationStart: Date.now(),
+		};
+	}
+};
 
 function buildFromFile() {
-	const options = {
-		resources: 'usable',
-		//url: "http://localhost:8080/",
-		referrer: "https://ui5.sap.com/",
-		runScripts: 'dangerously',
-		pretendToBeVisual: true
-	};
+	console.log('buildFromFile');
+	const options = {...optionsDefault};
 	return JSDOM.fromFile('webapp/test/test-jsdom.html', options);
 };
 
 function buildFromUrl() {
-	const options = {
-		resources: 'usable',
-		//url: "http://localhost:8080/",
-		//referrer: "https://ui5.sap.com/",
-		runScripts: 'dangerously',
-		pretendToBeVisual: true
-	};
+	console.log('buildFromUrl');
+	const options = {...optionsDefault};
+
 	return JSDOM.fromURL('http://localhost:8080/test/test-jsdom.html', options);
 };
 
@@ -42,29 +46,7 @@ describe('test suite', async function () {
 		dom = await buildFromFile();
 		//dom = await buildFromUrl();
 		window = dom.window;
-		console.log(11111111);
-
 		console.log(window.location.origin);
-		window.matchMedia = function () { };
-		mock.method(window, 'matchMedia', function () {
-			return {
-				matches: false,
-				addListener: function () { },
-				removeListener: function () { }
-			};
-		});
-		console.dir(window.matchMedia);
-		console.log(6666666666);
-		/* window.matchMedia = function () {
-			return {
-				matches: false,
-				addListener: function () {},
-				removeListener: function () {}
-			};
-		}; */
-		window.performance.timing = {
-			fetchStart: 0
-		};
 
 		await new Promise((resolve) => {
 			window.onUi5ModulesLoaded = () => {
@@ -79,16 +61,16 @@ describe('test suite', async function () {
 	});
 
 	describe('Test JSDOM', async function () {
-		test('test if node:test works correctly', function () {
+		it('test if node:test works correctly', function () {
 			assert.equal(1, 1);
 		});
 
-		test('test if JSDOM has been loaded', function () {
+		it('test if JSDOM has been loaded', function () {
 			assert.ok(dom.window.document);
 			assert.ok(dom.window.document.body);
 		});
 
-		test('test if UI5 has been loaded', function () {
+		it('test if UI5 has been loaded', function () {
 			assert.ok(sap);
 		});
 	});
@@ -108,7 +90,7 @@ describe('test suite', async function () {
 			mock.reset();
 		});
 
-		test('Check controller initial state', () => {
+		it('Check controller initial state', () => {
 			// Act
 			this.oAppController.onInit();
 
@@ -137,7 +119,7 @@ describe('test suite', async function () {
 			mock.reset();
 		});
 
-		test('Should add a todo element to the model', () => {
+		it('Should add a todo element to the model', () => {
 			assert.strictEqual(this.oJSONModelStub.getObject("/todos").length, 0, "There must be no todos defined.");
 
 			// Act
@@ -149,7 +131,7 @@ describe('test suite', async function () {
 			assert.strictEqual(this.oJSONModelStub.getObject("/todos").length, 2, "There are couple items in ToDo list.");
 		});
 
-		test("Should toggle the completed items in the model", () => {
+		it("Should toggle the completed items in the model", () => {
 			// Arrange
 			var oModelData = {
 				todos: [{
@@ -172,7 +154,7 @@ describe('test suite', async function () {
 			assert.strictEqual(this.oJSONModelStub.getProperty("/itemsLeftCount"), 0, "There is no item left.");
 		});
 
-		test("Should clear the completed items", () => {
+		it("Should clear the completed items", () => {
 			// Arrange
 			var oModelData = {
 				todos: [{
@@ -200,7 +182,7 @@ describe('test suite', async function () {
 			assert.strictEqual(this.oJSONModelStub.getProperty("/itemsLeftCount"), 1, "There is one item left.");
 		});
 
-		test("Should update items left count when no todos are loaded, yet", () => {
+		it("Should update items left count when no todos are loaded, yet", () => {
 			// Arrange
 			var oModelData = {};
 			this.oJSONModelStub.setData(oModelData);
@@ -244,7 +226,7 @@ describe('test suite', async function () {
 			mock.reset();
 		});
 
-		test("Empty search", () => {
+		it("Empty search", () => {
 			// Setup
 			var oEvent = {
 				getSource: function () {
@@ -276,7 +258,7 @@ describe('test suite', async function () {
 			);
 		});
 
-		test("Do a search", () => {
+		it("Do a search", () => {
 			assert.ok(1);
 			// Setup
 			var sSearchQuery = "ToDo item";
@@ -342,7 +324,7 @@ describe('test suite', async function () {
 			mock.reset();
 		});
 
-		test("Toggle filters", () => {
+		it("Toggle filters", () => {
 			// Setup
 			var sKey = "";
 			var oEvent = {
