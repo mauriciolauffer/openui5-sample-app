@@ -3,6 +3,7 @@
 	"version": "0.3.0",
 	"description": "Sample of an OpenUI5 app",
 	"private": true,
+	"type": "module",
 	"engines": {
 		"node": ">=18.14.0",
 		"npm": ">=9"
@@ -14,6 +15,7 @@
 		"karma-ci": "rimraf coverage && karma start karma-ci.conf.js",
 		"watch": "npm run karma",
 		"test": "npm run lint && npm run karma-ci",
+		"test:nodejs": "node --test webapp/test/unit-happydom",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
 		"serve-dist": "ws --compress -d dist"
@@ -22,6 +24,7 @@
 		"@ui5/cli": "^3.3.3",
 		"@ui5/middleware-code-coverage": "^1.0.3",
 		"eslint": "^8.45.0",
+		"happy-dom": "^10.5.2",
 		"karma": "^6.4.2",
 		"karma-chrome-launcher": "^3.2.0",
 		"karma-coverage": "^2.2.1",
