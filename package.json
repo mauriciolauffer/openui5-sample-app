@@ -3,6 +3,7 @@
 	"version": "0.3.0",
 	"description": "Sample of an OpenUI5 app",
 	"private": true,
+	"type": "module",
 	"engines": {
 		"node": ">=18.14.0",
 		"npm": ">=9"
@@ -14,19 +15,30 @@
 		"karma-ci": "rimraf coverage && karma start karma-ci.conf.js",
 		"watch": "npm run karma",
 		"test": "npm run lint && npm run karma-ci",
+		"dev": "vite",
+		"test:nodejs": "vitest run",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
 		"serve-dist": "ws --compress -d dist"
 	},
 	"devDependencies": {
-		"@ui5/cli": "^3.3.3",
+		"@ui5/cli": "^3.3.4",
 		"@ui5/middleware-code-coverage": "^1.0.3",
-		"eslint": "^8.45.0",
+		"@vitest/browser": "^0.34.1",
+		"eslint": "^8.46.0",
+		"happy-dom": "^10.8.0",
+		"jsdom": "^22.1.0",
 		"karma": "^6.4.2",
 		"karma-chrome-launcher": "^3.2.0",
 		"karma-coverage": "^2.2.1",
 		"karma-ui5": "^3.0.3",
 		"local-web-server": "^5.3.0",
+		"playwright": "^1.36.2",
 		"rimraf": "^5.0.1"
+	},
+	"dependencies": {
+		"vite": "^4.4.8",
+		"vite-plugin-xml-loader": "^1.0.2",
+		"vitest": "^0.34.1"
 	}
 }
