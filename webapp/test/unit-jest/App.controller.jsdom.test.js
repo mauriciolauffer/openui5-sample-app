@@ -46,7 +46,7 @@ function buildFromUrl() {
 	return JSDOM.fromURL('http://localhost:8080/test/test-jsdom.html', options);
 };
 
-describe.skip('test suite', function () {
+describe('test suite', function () {
 	let dom = {};
 	let window = {};
 	let document = {};
@@ -71,6 +71,7 @@ describe.skip('test suite', function () {
 		await new Promise((resolve) => {
 			window.onUi5ModulesLoaded = () => {
 				sap = window.sap;
+				console.dir(define);
 				resolve();
 			};
 		});

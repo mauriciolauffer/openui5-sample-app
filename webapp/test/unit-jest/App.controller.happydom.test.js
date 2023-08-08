@@ -6,7 +6,9 @@
 
 'use strict';
 
-describe('test suite', function () {
+const path = require('path');
+
+describe.skip('test suite', function () {
 	let sap = {};
 
 	beforeAll(async () => {
@@ -27,21 +29,28 @@ describe('test suite', function () {
 		}; */
 		const scriptUi5Bootstrap = document.createElement('script');
 		scriptUi5Bootstrap.id = "sap-ui-bootstrap";
+		//scriptUi5Bootstrap.async = true;
 		scriptUi5Bootstrap.src = "https://ui5.sap.com/resources/sap-ui-core.js";
-		//scriptUi5Bootstrap.src = "http://localhost:8080/resources/sap-ui-core.js";
 		//scriptUi5Bootstrap.setAttribute('data-sap-ui-oninit', 'onUi5Boot()');
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-libs', "sap.m");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-theme', "sap_horizon");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-compatVersion', "edge");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-async', "true");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-language', "en");
-		scriptUi5Bootstrap.setAttribute('data-sap-ui-resourceRoots', '{"sap.ui.demo.todo" : "../../../../../../"}');
+		scriptUi5Bootstrap.setAttribute('data-sap-ui-resourceRoots', '{"sap.ui.demo.todo" : "../../"}');
 		scriptUi5Bootstrap.crossorigin = "anonymous";
 		document.body.appendChild(scriptUi5Bootstrap);
 		//await window.happyDOM.whenAsyncComplete();
 		await new Promise((resolve, reject) => {
+			console.log(`file:${path.join(__dirname, '../../controller/App.controller.js')}`);
+			console.log(`file:${path.join(__dirname, '../../Component.js')}`);
+			const xxx = require('../../controller/App.controller.js');
+			const zzz = require('../../Component.js');
+			console.dir(xxx);
+			console.dir(zzz);
 			sap = window.sap;
-			window.happyDOM.setURL('http://localhost:8080/');
+			//return resolve();
+			window.happyDOM.setURL('./');
 			sap.ui.require([
 				"sap/ui/demo/todo/controller/App.controller"
 			], function (App) {
@@ -50,18 +59,18 @@ describe('test suite', function () {
 				reject(err);
 			});
 		});
-	});
+	}, 15000);
 
 	afterAll(() => {
 		window.happyDOM.cancelAsync();
 	});
 
-	describe('Test JSDOM', function () {
+	describe('Test happyDOM', function () {
 		it('test if node:test works correctly', function () {
 			expect(1).toBe(1);
 		});
 
-		it('test if JSDOM has been loaded', function () {
+		it('test if happyDOM has been loaded', function () {
 			expect(window).toBeTruthy();
 			expect(document).toBeTruthy();
 			expect(document).toBeTruthy();
