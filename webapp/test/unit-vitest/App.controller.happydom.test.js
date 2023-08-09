@@ -22,7 +22,6 @@ describe('test suite happyDOM', function () {
 		scriptUi5Bootstrap.id = "sap-ui-bootstrap";
 		scriptUi5Bootstrap.src = "https://ui5.sap.com/resources/sap-ui-core.js";
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-libs', "sap.m");
-		scriptUi5Bootstrap.setAttribute('data-sap-ui-theme', "sap_horizon");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-compatVersion', "edge");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-async', "true");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-language', "en");
@@ -45,6 +44,10 @@ describe('test suite happyDOM', function () {
 
 	afterAll(() => {
 		window.happyDOM.cancelAsync();
+	});
+
+	afterEach(() => {
+		vi.clearAllMocks();
 	});
 
 	describe('Test happyDOM', function () {
@@ -75,10 +78,6 @@ describe('test suite happyDOM', function () {
 			context.oViewStub.setModel(context.oJSONModelStub);
 		});
 
-		afterEach(() => {
-			vi.clearAllMocks();
-		});
-
 		it('Check controller initial state', (context) => {
 			// Act
 			context.oAppController.onInit();
@@ -102,10 +101,6 @@ describe('test suite happyDOM', function () {
 			});
 			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "getView").mockReturnValue(context.oViewStub);
 			context.oViewStub.setModel(context.oJSONModelStub);
-		});
-
-		afterEach(() => {
-			vi.clearAllMocks();
 		});
 
 		it('Should add a todo element to the model', (context) => {
@@ -209,10 +204,6 @@ describe('test suite happyDOM', function () {
 			);
 		});
 
-		afterEach(() => {
-			vi.clearAllMocks();
-		});
-
 		it("Empty search", (context) => {
 			// Setup
 			var oEvent = {
@@ -272,10 +263,6 @@ describe('test suite happyDOM', function () {
 				new sap.ui.model.resource.ResourceModel({ bundleName: "sap.ui.demo.todo.i18n.i18n" }),
 				"i18n"
 			);
-		});
-
-		afterEach(() => {
-			vi.clearAllMocks();
 		});
 
 		it("Toggle filters", (context) => {

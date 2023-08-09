@@ -63,6 +63,10 @@ describe('test suite JSDOM', function () {
 		window.close();
 	});
 
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
 	describe('Test JSDOM', function () {
 		it('test if Vitest works correctly', function () {
 			expect(1).toBeTruthy();
@@ -91,10 +95,6 @@ describe('test suite JSDOM', function () {
 			context.oViewStub.setModel(context.oJSONModelStub);
 		});
 
-		afterEach(() => {
-			vi.clearAllMocks();
-		});
-
 		it('Check controller initial state', (context) => {
 			// Act
 			context.oAppController.onInit();
@@ -118,10 +118,6 @@ describe('test suite JSDOM', function () {
 			});
 			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "getView").mockReturnValue(context.oViewStub);
 			context.oViewStub.setModel(context.oJSONModelStub);
-		});
-
-		afterEach(() => {
-			vi.clearAllMocks();
 		});
 
 		it('Should add a todo element to the model', (context) => {
@@ -225,10 +221,6 @@ describe('test suite JSDOM', function () {
 			);
 		});
 
-		afterEach(() => {
-			vi.clearAllMocks();
-		});
-
 		it("Empty search", (context) => {
 			// Setup
 			var oEvent = {
@@ -288,10 +280,6 @@ describe('test suite JSDOM', function () {
 				new sap.ui.model.resource.ResourceModel({ bundleName: "sap.ui.demo.todo.i18n.i18n" }),
 				"i18n"
 			);
-		});
-
-		afterEach(() => {
-			vi.clearAllMocks();
 		});
 
 		it("Toggle filters", (context) => {
