@@ -9,9 +9,10 @@
 </head>
 
 <body class="sapUiBody">
-	<script id="sap-ui-bootstrap" src="https://ui5.sap.com/resources/sap-ui-core.js" data-sap-ui-libs="sap.m"
+	<script id="sap-ui-bootstrap" src="https://ui5.sap.com/resources/sap-ui-core.js"
+		data-sap-ui-libs="sap.m"
 		data-sap-ui-theme="sap_horizon" data-sap-ui-compatVersion="edge"
-		data-sap-ui-async="true" data-sap-ui-logLevel="ERROR"
+		data-sap-ui-async="true" data-sap-ui-language="en"
 		data-sap-ui-oninit="onUi5Boot()"
 		data-sap-ui-resourceRoots='{
 			"sap.ui.demo.todo": "../"
@@ -22,7 +23,6 @@
 			sap.ui.require([
 			"sap/ui/demo/todo/controller/App.controller",
 			], function () {
-				console.log(1111111);
 				if (window.onUi5ModulesLoaded) {
 					window.onUi5ModulesLoaded();
 				}
