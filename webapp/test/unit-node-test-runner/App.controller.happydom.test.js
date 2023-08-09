@@ -1,23 +1,27 @@
-/**
- * @vitest-environment happy-dom
- * @vitest-environment-options {"url": "https://ui5.sap.com/", "width": 1024, "height": 768}
- */
-
 'use strict';
 
-import { describe, it, beforeAll, beforeEach, afterAll, afterEach, expect, vi } from 'vitest';
+import { describe, it, before, beforeEach, after, afterEach, mock } from 'node:test';
+import assert from 'node:assert';
+import { Window } from 'happy-dom';
 
-describe('test suite happyDOM', function () {
+describe('test suite JSDOM', function () {
+	let window = {};
+	let document = {};
 	let sap = {};
 
-	beforeAll(async () => {
+	before(async () => {
+		window = new Window({
+			url: 'https://ui5.sap.com/',
+			width: 1024,
+			height: 768
+		});
 		// Patch window.performance.timing because it doesn't exist in nodejs nor happyDOM
 		window.performance.timing = {
 			fetchStart: Date.now(),
 			navigationStart: Date.now()
 		};
 
-		window.happyDOM.setURL('https://ui5.sap.com');
+		document = window.document;
 		const scriptUi5Bootstrap = document.createElement('script');
 		scriptUi5Bootstrap.id = "sap-ui-bootstrap";
 		scriptUi5Bootstrap.src = "https://ui5.sap.com/resources/sap-ui-core.js";
@@ -42,39 +46,39 @@ describe('test suite happyDOM', function () {
 		});
 	});
 
-	afterAll(() => {
+	after(() => {
 		window.happyDOM.cancelAsync();
 	});
 
 	afterEach(() => {
-		vi.clearAllMocks();
+		mock.reset();
 	});
 
-	describe('Test happyDOM', function () {
-		it('test if Vitest works', function () {
-			expect(1).toBeTruthy();
+	describe('Test happyDOM', async function () {
+		it('test if node:test works correctly', function () {
+			assert.ok(1);
 		});
 
 		it('test if happyDOM has been loaded', function () {
-			expect(window).toBeTruthy();
-			expect(document).toBeTruthy();
-			expect(document.body).toBeTruthy();
+			assert.ok(window);
+			assert.ok(window.document);
+			assert.ok(window.document.body);
 		});
 
 		it('test if UI5 has been loaded', function () {
-			expect(sap).toBeTruthy();
-			expect(sap.ui.demo.todo.controller.App).toBeTruthy();
+			assert.ok(sap);
+			assert.ok(sap.ui.demo.todo.controller.App);
 		});
 	});
 
-	describe('Test init state', function () {
+	describe('Test init state', async function () {
 		beforeEach((context) => {
 			context.oAppController = new sap.ui.demo.todo.controller.App();
 			context.oViewStub = new sap.ui.base.ManagedObject({});
 			context.oJSONModelStub = new sap.ui.model.json.JSONModel({
 				todos: []
 			});
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, 'getView').mockReturnValue(context.oViewStub);
+			mock.method(sap.ui.core.mvc.Controller.prototype, "getView", () => context.oViewStub);
 			context.oViewStub.setModel(context.oJSONModelStub);
 		});
 
@@ -83,28 +87,28 @@ describe('test suite happyDOM', function () {
 			context.oAppController.onInit();
 
 			// Assert
-			expect(context.oAppController.aSearchFilters).toEqual([]); //"Search filters have been instantiated empty"
-			expect(context.oAppController.aTabFilters).toEqual([]); //"Tab filters have been instantiated empty"
+			assert.deepEqual(context.oAppController.aSearchFilters, [], "Search filters have been instantiated empty");
+			assert.deepEqual(context.oAppController.aTabFilters, [], "Tab filters have been instantiated empty");
 
 			var oModel = context.oAppController.getView().getModel("view").getData();
-			expect(oModel).toEqual({ isMobile: sap.ui.Device.browser.mobile, filterText: undefined });
+			assert.deepEqual(oModel, { isMobile: sap.ui.Device.browser.mobile, filterText: undefined });
 		});
 	});
 
 
-	describe('Test model modification', function () {
+	describe('Test model modification', async function () {
 		beforeEach((context) => {
 			context.oAppController = new sap.ui.demo.todo.controller.App();
 			context.oViewStub = new sap.ui.base.ManagedObject({});
 			context.oJSONModelStub = new sap.ui.model.json.JSONModel({
 				todos: []
 			});
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "getView").mockReturnValue(context.oViewStub);
+			mock.method(sap.ui.core.mvc.Controller.prototype, "getView", () => context.oViewStub);
 			context.oViewStub.setModel(context.oJSONModelStub);
 		});
 
 		it('Should add a todo element to the model', (context) => {
-			expect(context.oJSONModelStub.getObject("/todos").length).toStrictEqual(0); //"There must be no todos defined."
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos").length, 0, "There must be no todos defined.");
 
 			// Act
 			context.oJSONModelStub.setProperty("/todos", [{ title: "Completed item", completed: true }]);
@@ -112,7 +116,7 @@ describe('test suite happyDOM', function () {
 			context.oAppController.addTodo();
 
 			// Assumption
-			expect(context.oJSONModelStub.getObject("/todos").length).toStrictEqual(2); //"There are couple items in ToDo list."
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos").length, 2, "There are couple items in ToDo list.");
 		});
 
 		it("Should toggle the completed items in the model", (context) => {
@@ -127,15 +131,15 @@ describe('test suite happyDOM', function () {
 			context.oJSONModelStub.setData(oModelData);
 
 			// initial assumption
-			expect(context.oJSONModelStub.getObject("/todos").length).toStrictEqual(1); //"There is one item."
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toStrictEqual(1); //"There is one item left."
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos").length, 1, "There is one item.");
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), 1, "There is one item left.");
 
 			// Act
 			context.oJSONModelStub.setProperty("/todos/0/completed", true);
 			context.oAppController.updateItemsLeftCount();
 
 			// Assumption
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toStrictEqual(0); //"There is no item left."
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), 0, "There is no item left.");
 		});
 
 		it("Should clear the completed items", (context) => {
@@ -154,16 +158,16 @@ describe('test suite happyDOM', function () {
 
 
 			// initial assumption
-			expect(context.oJSONModelStub.getObject("/todos").length).toStrictEqual(2); //"There are two items."
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toStrictEqual(1); //"There is no item left."
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos").length, 2, "There are two items.");
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), 1, "There is no item left.");
 
 			// Act
 			context.oAppController.clearCompleted();
 			context.oAppController.updateItemsLeftCount();
 
 			// Assumption
-			expect(context.oJSONModelStub.getObject("/todos").length).toStrictEqual(1); //"There is one item left."
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toStrictEqual(1); //"There is one item left."
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos").length, 1, "There is one item left.");
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), 1, "There is one item left.");
 		});
 
 		it("Should update items left count when no todos are loaded, yet", (context) => {
@@ -172,14 +176,14 @@ describe('test suite happyDOM', function () {
 			context.oJSONModelStub.setData(oModelData);
 
 			// initial assumption
-			expect(context.oJSONModelStub.getObject("/todos")).toBeUndefined(); //"There are no items."
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toBeUndefined(); //"Items left is not set"
+			assert.strictEqual(context.oJSONModelStub.getObject("/todos"), undefined, "There are no items.");
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), undefined, "Items left is not set");
 
 			// Act
 			context.oAppController.updateItemsLeftCount();
 
 			// Assumption
-			expect(context.oJSONModelStub.getProperty("/itemsLeftCount")).toStrictEqual(0); //"There is no item left."
+			assert.strictEqual(context.oJSONModelStub.getProperty("/itemsLeftCount"), 0, "There is no item left.");
 		});
 	});
 
@@ -189,9 +193,11 @@ describe('test suite happyDOM', function () {
 			context.oAppController = new sap.ui.demo.todo.controller.App();
 			context.oViewStub = new sap.ui.base.ManagedObject({});
 			context.oListStub = new sap.ui.base.ManagedObject({});
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "getView").mockReturnValue(context.oViewStub);
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "byId").mockReturnValue(context.oListStub);
-			vi.spyOn(context.oListStub, "getBinding").mockReturnValue({ filter: function () { } });
+			mock.method(sap.ui.core.mvc.Controller.prototype, "getView", () => context.oViewStub);
+			mock.method(sap.ui.core.mvc.Controller.prototype, "byId", () => context.oListStub);
+			mock.method(context.oListStub, "getBinding", () => {
+				return { filter: function () { } };
+			});
 
 			context.oJSONModelStub = new sap.ui.model.json.JSONModel({
 				todos: [],
@@ -216,12 +222,28 @@ describe('test suite happyDOM', function () {
 			context.oAppController.onSearch(oEvent);
 
 			// Assert
-			expect(context.oAppController.sSearchQuery).toStrictEqual(""); //"The search term is an empty string"
-			expect(context.oAppController.aSearchFilters).toEqual([]); //"Search filters are empty"
-			expect(context.oAppController.getView().getModel().getProperty("/itemsRemovable")).toStrictEqual(true); //"Button toggle is properly set"
+			assert.strictEqual(
+				context.oAppController.sSearchQuery,
+				"",
+				"The search term is an empty string"
+			);
+			assert.deepEqual(
+				context.oAppController.aSearchFilters,
+				[],
+				"Search filters are empty"
+			);
+			assert.strictEqual(
+				context.oAppController
+					.getView()
+					.getModel()
+					.getProperty("/itemsRemovable"),
+				true,
+				"Button toggle is properly set"
+			);
 		});
 
 		it("Do a search", (context) => {
+			assert.ok(1);
 			// Setup
 			var sSearchQuery = "ToDo item";
 			var oEvent = {
@@ -238,9 +260,24 @@ describe('test suite happyDOM', function () {
 			context.oAppController.onSearch(oEvent);
 
 			// Assert
-			expect(context.oAppController.sSearchQuery).toStrictEqual(sSearchQuery); //"The search term is an empty string"
-			expect(context.oAppController.aSearchFilters.length).toStrictEqual(1); //"A search filter is constructed"
-			expect(context.oAppController.getView().getModel().getProperty("/itemsRemovable")).toStrictEqual(false); //"Button toggle is properly set"
+			assert.strictEqual(
+				context.oAppController.sSearchQuery,
+				sSearchQuery,
+				"The search term is an empty string"
+			);
+			assert.strictEqual(
+				context.oAppController.aSearchFilters.length,
+				1,
+				"A search filter is constructed"
+			);
+			assert.strictEqual(
+				context.oAppController
+					.getView()
+					.getModel()
+					.getProperty("/itemsRemovable"),
+				false,
+				"Button toggle is properly set"
+			);
 		});
 	});
 
@@ -250,9 +287,11 @@ describe('test suite happyDOM', function () {
 			context.oAppController = new sap.ui.demo.todo.controller.App();
 			context.oViewStub = new sap.ui.base.ManagedObject({});
 			context.oListStub = new sap.ui.base.ManagedObject({});
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "getView").mockReturnValue(context.oViewStub);
-			vi.spyOn(sap.ui.core.mvc.Controller.prototype, "byId").mockReturnValue(context.oListStub);
-			vi.spyOn(context.oListStub, "getBinding").mockReturnValue({ filter: function () { } });
+			mock.method(sap.ui.core.mvc.Controller.prototype, "getView", () => context.oViewStub);
+			mock.method(sap.ui.core.mvc.Controller.prototype, "byId", () => context.oListStub);
+			mock.method(context.oListStub, "getBinding", () => {
+				return { filter: function () { } };
+			});
 
 			context.oJSONModelStub = new sap.ui.model.json.JSONModel({
 				todos: [],
@@ -279,37 +318,77 @@ describe('test suite happyDOM', function () {
 			context.oAppController.onFilter(oEvent);
 
 			// Assert
-			expect(context.oAppController.sFilterKey).toStrictEqual(sKey); //"Correct filter key is applied"
-			expect(context.oAppController.aTabFilters.length).toStrictEqual(0); //"Empty key == no filter"
+			assert.strictEqual(
+				context.oAppController.sFilterKey,
+				sKey,
+				"Correct filter key is applied"
+			);
+			assert.strictEqual(
+				context.oAppController.aTabFilters.length,
+				0,
+				"Empty key == no filter"
+			);
 
 			// Act
 			sKey = "active"; // alters oEvent
 			context.oAppController.onFilter(oEvent);
 			// Assert
-			expect(context.oAppController.sFilterKey).toStrictEqual(sKey); //"Correct filter key is applied"
-			expect(context.oAppController.aTabFilters.length).toStrictEqual(1); //"A filter is constructed"
+			assert.strictEqual(
+				context.oAppController.sFilterKey,
+				sKey,
+				"Correct filter key is applied"
+			);
+			assert.strictEqual(
+				context.oAppController.aTabFilters.length,
+				1,
+				"A filter is constructed"
+			);
 
 			// Act
 			sKey = "completed"; // alters oEvent
 			context.oAppController.onFilter(oEvent);
 			// Assert
-			expect(context.oAppController.sFilterKey).toStrictEqual(sKey); //"Correct filter key is applied"
-			expect(context.oAppController.aTabFilters.length).toStrictEqual(1); //"A filter is constructed"
+			assert.strictEqual(
+				context.oAppController.sFilterKey,
+				sKey,
+				"Correct filter key is applied"
+			);
+			assert.strictEqual(
+				context.oAppController.aTabFilters.length,
+				1,
+				"A filter is constructed"
+			);
 
 			// Act
 			sKey = "completed"; // alters oEvent
 			context.oAppController.sSearchQuery = "test";
 			context.oAppController.onFilter(oEvent);
 			// Assert
-			expect(context.oAppController.sFilterKey).toStrictEqual(sKey); //"Correct filter key is applied"
-			expect(context.oAppController.aTabFilters.length).toStrictEqual(1); //"A filter is constructed"
+			assert.strictEqual(
+				context.oAppController.sFilterKey,
+				sKey,
+				"Correct filter key is applied"
+			);
+			assert.strictEqual(
+				context.oAppController.aTabFilters.length,
+				1,
+				"A filter is constructed"
+			);
 
 			// Act
 			sKey = "all"; // alters oEvent
 			context.oAppController.onFilter(oEvent);
 			// Assert
-			expect(context.oAppController.sFilterKey).toStrictEqual(sKey); //"Correct filter key is applied"
-			expect(context.oAppController.aTabFilters.length).toStrictEqual(0); //"Cleans up filters"
+			assert.strictEqual(
+				context.oAppController.sFilterKey,
+				sKey,
+				"Correct filter key is applied"
+			);
+			assert.strictEqual(
+				context.oAppController.aTabFilters.length,
+				0,
+				"Cleans up filters"
+			);
 		});
 	});
 

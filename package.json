@@ -15,17 +15,14 @@
 		"karma-ci": "rimraf coverage && karma start karma-ci.conf.js",
 		"watch": "npm run karma",
 		"test": "npm run lint && npm run karma-ci",
-		"dev": "vite",
-		"test:nodejs": "vitest run",
-		"test:nodejs:coverage": "vitest run --coverage",
+		"test:nodejs": "node --test webapp/test/unit-node-test-runner",
+		"test:nodejs:coverage": "node --test --experimental-test-coverage webapp/test/unit-node-test-runner",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
 		"serve-dist": "ws --compress -d dist"
 	},
 	"devDependencies": {
 		"@ui5/middleware-code-coverage": "^1.0.3",
-		"@vitest/browser": "^0.34.1",
-		"@vitest/coverage-v8": "^0.34.1",
 		"eslint": "^8.46.0",
 		"happy-dom": "^10.9.0",
 		"jsdom": "^22.1.0",
@@ -34,9 +31,7 @@
 		"karma-coverage": "^2.2.1",
 		"karma-ui5": "^3.0.3",
 		"local-web-server": "^5.3.0",
-		"playwright": "^1.36.2",
-		"rimraf": "^5.0.1",
-		"vitest": "^0.34.1"
+		"rimraf": "^5.0.1"
 	},
 	"peerDependencies": {
 		"@ui5/cli": ">=3"
