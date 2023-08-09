@@ -19,7 +19,6 @@ describe('test suite happyDOM', function () {
 		scriptUi5Bootstrap.id = "sap-ui-bootstrap";
 		scriptUi5Bootstrap.src = "https://ui5.sap.com/resources/sap-ui-core.js";
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-libs', "sap.m");
-		scriptUi5Bootstrap.setAttribute('data-sap-ui-theme', "sap_horizon");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-compatVersion', "edge");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-async', "true");
 		scriptUi5Bootstrap.setAttribute('data-sap-ui-language', "en");
