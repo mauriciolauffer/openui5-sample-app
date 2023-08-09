@@ -15,7 +15,7 @@
 		"watch": "npm run karma",
 		"test": "npm run lint && npm run karma-ci",
 		"test:nodejs": "jest",
-		"test:nodejs:coverage": "jest --coverage --coverageProvider v8 --coverageProvider=v8",
+		"test:nodejs:coverage": "jest --coverage --coverageProvider=v8",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
 		"serve-dist": "ws --compress -d dist"

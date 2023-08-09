@@ -6,10 +6,7 @@
 
 'use strict';
 
-/* const { TextEncoder, TextDecoder } = require('util');
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-const { JSDOM } = require('jsdom'); */
+const { JSDOM } = require('jsdom');
 
 
 const optionsDefault = {
@@ -44,7 +41,7 @@ function buildFromUrl() {
 	return JSDOM.fromURL('http://localhost:8080/test/test-jsdom.html', options);
 };
 
-describe.skip('test suite JSDOM', function () {
+describe('test suite JSDOM', function () {
 	let dom = {};
 	let window = {};
 	let document = {};

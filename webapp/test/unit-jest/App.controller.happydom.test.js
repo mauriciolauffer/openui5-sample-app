@@ -1,4 +1,3 @@
-
 /**
  * @jest-environment @happy-dom/jest-environment
  * @jest-environment-options {"url": "https://ui5.sap.com/", "width": 1024, "height": 768}
