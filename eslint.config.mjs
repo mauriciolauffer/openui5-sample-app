@@ -7,6 +7,8 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.browser,
+				...globals.mocha,
+				...globals.qunit,
                 sap: "readonly"
             },
             ecmaVersion: 2023,
@@ -36,7 +38,7 @@ export default [
             "no-unused-expressions": 1,
             "no-use-before-define": [1, "nofunc"],
             "no-warning-comments": 1,
-            "strict": 1,
+            "strict": 0,
             "default-case": 1,
             "dot-notation": 0,
             "eol-last": 0,
