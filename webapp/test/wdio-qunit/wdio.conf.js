@@ -1,11 +1,4 @@
 module.exports.config = {
-	specs: ["./**/*.test.js"],
-
-	suites: {
-		unit: ["unit/*.test.js"],
-		opa: ["integration/*.test.js"]
-	},
-
 	capabilities: [
 		{
 			browserName: "chrome",
@@ -21,7 +14,16 @@ module.exports.config = {
 	reporters: ["spec"],
 	waitforTimeout: 120000,
 
-	services: ["qunit"],
+	services: [
+		[
+			"qunit",
+			{
+				paths: [
+					"http://localhost:8080/test/wdio-qunit/unit/unitTests.qunit.html",
+				],
+			},
+		],
+	],
 
 	mochaOpts: {
 		ui: "bdd",
