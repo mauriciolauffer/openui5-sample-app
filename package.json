@@ -17,7 +17,8 @@
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
 		"serve-dist": "ws --compress -d dist",
-		"test:wdio": "wdio run ./webapp/test/wdio-qunit/wdio.conf.js"
+		"test:wdio": "wdio run ./webapp/test/wdio-qunit/wdio.conf.js",
+		"test:cov": "wdio run ./webapp/test/wdio-qunit/wdio.conf.js --suite opa"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.14.0",

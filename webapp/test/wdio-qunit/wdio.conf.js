@@ -21,7 +21,23 @@ module.exports.config = {
 	reporters: ["spec"],
 	waitforTimeout: 120000,
 
-	services: ["qunit"],
+	services: [
+		"qunit",
+		[
+			"monocart",
+			{
+				name: "WebdriverIO Coverage Report",
+				filter: {
+					"**/resources/**": false,
+					"**/test-resources/**": false,
+					"**/test/**": false,
+					"**/**": true,
+				},
+				reports: ["v8"],
+				outputDir: "./coverage",
+			},
+		],
+	],
 
 	mochaOpts: {
 		ui: "bdd",
