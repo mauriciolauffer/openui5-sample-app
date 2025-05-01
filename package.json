@@ -14,17 +14,21 @@
 		"test": "npm run lint && npm run test-runner",
 		"build": "ui5 build -a --clean-dest",
 		"build-self-contained": "ui5 build self-contained -a --clean-dest",
-		"serve-dist": "ws --compress -d dist"
+		"serve-dist": "ws --compress -d dist",
+		"start:test": "concurrently  --kill-others --success first 'npm:start' 'npm:test-wdio'",
+		"test-wdio": "wdio webapp/test/wdio.conf.js"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.14.0",
 		"@ui5/cli": "^4.0.15",
 		"@ui5/linter": "^1.13.0",
 		"@ui5/middleware-code-coverage": "^2.0.1",
+		"concurrently": "^9.1.2",
 		"eslint": "^9.25.1",
 		"globals": "^16.0.0",
 		"local-web-server": "^5.4.0",
 		"rimraf": "^6.0.1",
-		"ui5-test-runner": "^5.7.0"
+		"ui5-test-runner": "^5.7.0",
+		"wdio-qunit-service": "^2.0.0"
 	}
 }
